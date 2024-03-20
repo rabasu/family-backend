@@ -62,6 +62,10 @@ end
 
 gem 'active_hash', '~> 3.2', '>= 3.2.1'
 
-gem 'rubocop', '~> 1.62', '>= 1.62.1'
+gem 'rubocop', require: false
+
+gem 'rubocop-performance', require: false
+
+gem 'rubocop-rails', require: false
 
 gem 'rspec-rails', '~> 6.1', '>= 6.1.1'
