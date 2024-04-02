@@ -1,3 +1,4 @@
+# data migrateに用いるbuilderの基底クラス
 class Builder
   def datify(date, only_year: false)
     if only_year

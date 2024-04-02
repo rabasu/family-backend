@@ -1,3 +1,4 @@
+# 関連する複数のモデルを更新する際はここから行う
 class RecordBuilder < Builder
   def build(**attributes)
     defaults = { breed: :thoroughbred, group: :race_horse, only_year: false }
@@ -29,7 +30,7 @@ class RecordBuilder < Builder
     )
     attr[:bloodmare] = bloodmare
 
-    columns = [:bloodmare, :family_number, :imported_by, :imported_at, :only_year, :from]
+    columns = %i[bloodmare family_number imported_by imported_at only_year from]
     FamilyLine.generate(**attr.slice(*columns))
   end
 

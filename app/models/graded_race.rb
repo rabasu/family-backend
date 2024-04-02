@@ -1,3 +1,4 @@
+# 重賞
 class GradedRace < ApplicationRecord
   belongs_to :grade
   has_many :major_wins, dependent: :restrict_with_exception

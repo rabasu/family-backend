@@ -1,3 +1,4 @@
+# 重賞勝ち鞍
 class MajorWin < ApplicationRecord
   belongs_to :horse
   belongs_to :graded_race

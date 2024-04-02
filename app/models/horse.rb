@@ -1,3 +1,4 @@
+# 馬 競走馬・輸入牝馬・スタブ（血統表にのみ表示）の3種
 class Horse < ApplicationRecord
   belongs_to :sire, class_name: 'Horse', optional: true
   belongs_to :dam, class_name: 'Horse', optional: true
@@ -13,15 +14,13 @@ class Horse < ApplicationRecord
 
   has_many :awardings, dependent: :destroy
 
-  enum :sex, [ :male, :female ]
-  enum :breed, [ :thoroughbred, :anglo_arab, :sara_kei, :ara_kei, :arab, :keihan, :chuhan, :trotter ]
-  enum :group, [ :race_horse, :imported_mare, :stub ]
+  enum :sex, %i[male female]
+  enum :breed, %i[thoroughbred anglo_arab sara_kei ara_kei arab keihan chuhan trotter]
+  enum :group, %i[race_horse imported_mare stub]
 
   # 馬の特定には name(競走名)とfoaled(生年月日)を用いる
   # stub(血統表用の仮モデル)であってもfoaledは必須とする
-  # ただし、imported_mareの生成時のみfoaled無しを許容する(name単体で特定可能なため)
-  # FamilyLineはあくまで仮置きであり、後々詳細を追加する前提
-  # def self.generate(name:, pedigree_name:, foaled:, sex:, breed: :thoroughbred, group: :race_horse, family:, only_year: false)
+  # ただし、imported_mareの生成時のみfoaled無しを許容する(pedigree_name単体で特定可能なため)
   def self.generate(**attr)
     Rails.logger.info("Horse.generate: name=#{attr[:name]}, pedigree_name=#{attr[:pedigree_name]}, group=#{attr[:group]}")
 
@@ -34,20 +33,16 @@ class Horse < ApplicationRecord
     horse
   end
 
-  # 名前からimported_mare(輸入牝馬)を生成する
   def self.generate_imported_mare(**attr)
     defaults = { sex: :female, breed: :thoroughbred, group: :imported_mare, only_year: true }
     Horse.generate(**defaults.merge(attr))
   end
 
-  # 競走馬を競走名・生年月日・性別・牝系（・繁殖名・品種）から生成する
   def self.generate_race_horse(**attr)
     defaults = { breed: :thoroughbred, group: :race_horse, only_year: false }
     Horse.generate(**defaults.merge(attr))
   end
 
-  # 血統表に設定するためのstubを生成する
-  # race_horseが存在するならそれを使用する
   def self.generate_stub(**attr)
     defaults = { breed: :thoroughbred, group: :stub, only_year: false }
     Horse.generate(**defaults.merge(attr))
