@@ -81,4 +81,9 @@ class Horse < ApplicationRecord
       h[w.date.year] += [w.name]
     end
   end
+
+  # 自身のfamily_lineのbloodmareのdisplay_nameを返す
+  def bloodmare_display_name
+    bloodmare&.display_name
+  end
 end

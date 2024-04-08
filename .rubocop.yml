@@ -64,3 +64,4 @@ Style/Documentation:
     - 'db/data/*'
     - 'app/helpers/application_helper.rb'
     - 'app/mailers/application_mailer.rb'
+    - 'app/controllers/**/*_controller.rb'

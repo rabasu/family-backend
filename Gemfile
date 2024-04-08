@@ -73,3 +73,9 @@ gem 'rspec-rails', '~> 6.1', '>= 6.1.1'
 gem 'data_migrate'
 
 gem 'activesupport', '~> 7.1', '>= 7.1.3.2'
+
+gem 'rails-erd'
+
+gem 'rack-cors'
+
+gem 'jsonapi-serializer', '~> 2.2'
