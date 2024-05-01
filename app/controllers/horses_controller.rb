@@ -3,6 +3,10 @@ class HorsesController < ApplicationController
   def index
     @horses = Horse.where(group: :race_horse)
     json_string = HorseSerializer.new(@horses, options).serializable_hash.to_json
+
+    # json_stringをapp/json下にjsonファイルを作成し書き込む
+    File.write('app/json/horses.json', json_string)
+
     render json: json_string
   end
 
@@ -16,8 +20,6 @@ class HorsesController < ApplicationController
   private
 
   def options
-    options = {}
-    options[:include] = %i[sire dam family_line awardings]
-    options
+    { fields: { horse: %i[display_name foaled sex group sire dam family_line won_races] } }
   end
 end
