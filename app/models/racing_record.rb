@@ -1,5 +1,5 @@
-# 重賞勝ち鞍
-class MajorWin < ApplicationRecord
+# 重賞成績 1~3着までを記録する
+class RacingRecord < ApplicationRecord
   belongs_to :horse
   belongs_to :graded_race
 

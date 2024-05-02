@@ -7,31 +7,31 @@ class HorseSerializer
   # belongs_to :family_line, if: proc { |obj| obj.race_horse? || obj.imported_mare? }
 
   # has_many :awardings, if: proc { |obj| obj.race_horse? }
-  attribute :display_name do |obj|
-    name = obj.name
-    p_name = obj.pedigree_name
 
-    if name && p_name
-      "#{p_name}：#{name}"
-    elsif name.blank?
-      p_name.to_s
-    else
-      name.to_s
-    end
+  attributes :display_name, :foaled, :sex, :breed, :group
+
+  attributes :foaled_year do |obj|
+    obj.foaled&.year
   end
-
-  attributes :foaled, :sex, :breed, :group
 
   attributes :sire, if: proc { |obj| obj.race_horse? } do |obj|
     HorseSerializer.new(obj.sire).serializable_hash.fetch(:data, {})
+  end
+
+  attributes :sire_name do |obj|
+    obj.sire&.display_name
   end
 
   attributes :dam, if: proc { |obj| obj.race_horse? } do |obj|
     HorseSerializer.new(obj.dam).serializable_hash.fetch(:data, {})
   end
 
+  attributes :dam_name do |obj|
+    obj.dam&.display_name
+  end
+
   attributes :family_line, if: proc { |obj| obj.race_horse? || obj.imported_mare? } do |obj|
-    options = { fields: { family_line: %i[display_name family_number imported_at imported_by] } }
+    options = { fields: { family_line: %i[pedigree_name family_number imported_at imported_by] } }
     FamilyLineSerializer.new(obj.family_line, options).serializable_hash.fetch(:data, {})
   end
 
@@ -39,10 +39,20 @@ class HorseSerializer
     AwardingSerializer.new(obj.awardings).serializable_hash.fetch(:data, {})
   end
 
+  # k=年, v=勝利競走の配列でHashを生成する
   attribute :won_races do |obj|
-    major_wins = obj.major_wins
-    major_wins.sort_by(&:date).each_with_object(Hash.new([])) do |w, h|
+    racing_records = obj.racing_records.select { |r| r.finnish == 1 }
+    racing_records.sort_by(&:date).each_with_object(Hash.new([])) do |w, h|
       h[w.date.year] += [w.name]
+    end
+  end
+
+  # 勝利以外のレコードを含めてHashを生成する
+  attributes :all_races do |obj|
+    racing_records = obj.racing_records.sort_by(&:date)
+    racing_records.each_with_object(Hash.new([])) do |r, h|
+      record = { finnish: r.finnish, name: r.name }
+      h[r.date.year] += [record]
     end
   end
 end

@@ -4,8 +4,8 @@ class FamilyLinesController < ApplicationController
     @family_lines = FamilyLine.all
     json_string = FamilyLineSerializer.new(@family_lines, options).serializable_hash.to_json
 
-    # json_stringをapp/json下にjsonファイルを作成し書き込む
-    File.write('app/json/family_lines.json', json_string)
+    # api/json下にjsonファイルを作成しjson_stringを書き込む
+    File.write('../api/json/family_lines.json', json_string)
 
     render json: json_string
   end
@@ -20,6 +20,6 @@ class FamilyLinesController < ApplicationController
   private
 
   def options
-    { fields: { family_line: %i[display_name family_number imported_at imported_by bloodmare horses] } }
+    { fields: { family_line: %i[display_name family_number imported_year imported_by bloodmare horses] } }
   end
 end

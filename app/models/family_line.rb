@@ -2,7 +2,7 @@
 class FamilyLine < ApplicationRecord
   has_many :horses, dependent: :restrict_with_exception
   belongs_to :bloodmare, class_name: 'Horse'
-  delegate :display_name, to: :bloodmare
+  delegate :pedigree_name, to: :bloodmare
 
   enum :from, %i[America England Ireland Australia NewZealand]
 

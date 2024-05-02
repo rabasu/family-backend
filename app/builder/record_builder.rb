@@ -24,6 +24,7 @@ class RecordBuilder < Builder
     attr[:foaled] = datify(attr[:foaled], only_year: attr[:foaled_only_year])
 
     bloodmare = Horse.generate_imported_mare(
+      name: attr[:racing_name] || nil,
       pedigree_name: attr[:bloodmare],
       foaled: attr[:foaled],
       only_year: attr[:foaled_only_year],
@@ -34,16 +35,17 @@ class RecordBuilder < Builder
     FamilyLine.generate(**attr.slice(*columns))
   end
 
-  def win(horse:, date:, race_name:, code:, status: :current)
+  def run(horse:, date:, race_name:, grade:, finnish:, status: :current)
     race = GradedRace.find_by(
       official_name: race_name,
       status: status,
-      grade_id: Grade.find_by(code: code).id,
+      grade_id: Grade.find_by(code: grade).id,
     )
-    MajorWin.create(
+    RacingRecord.create(
       date: datify(date),
       horse: horse,
       graded_race: race,
+      finnish: finnish,
     )
   end
 end

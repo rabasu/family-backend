@@ -6,11 +6,11 @@ class Horse < ApplicationRecord
   has_many :dam_foals, class_name: 'Horse', foreign_key: 'dam_id', dependent: :restrict_with_exception, inverse_of: 'dam'
 
   belongs_to :family_line, optional: true
-  has_one :her_family, class_name: 'FamilyLine', foreign_key: 'bloodmare_id', dependent: :restrict_with_exception, inverse_of: 'bloodmare'
+  has_one :her_family, class_name: 'FamilyLine', foreign_key: 'bloodmare_id', dependent: :destroy, inverse_of: 'bloodmare'
   has_one :bloodmare, class_name: 'Horse', through: :family_line
 
-  has_many :major_wins, dependent: :destroy
-  has_many :graded_races, through: :major_wins
+  has_many :racing_records, dependent: :destroy
+  has_many :graded_races, through: :racing_records
 
   has_many :awardings, dependent: :destroy
 
@@ -48,37 +48,16 @@ class Horse < ApplicationRecord
     Horse.generate(**defaults.merge(attr))
   end
 
-  def win(date:, race_name:, code:, status: :current)
-    race = GradedRace.find_by(
-      official_name: race_name,
-      status: status,
-      grade: Grade.find_by(code: code),
-    )
-    MajorWin.create(
-      date: date&.to_date,
-      horse: self,
-      graded_race: race,
-    )
-  end
-
   def display_name
-    name = self.name
-    p_name = pedigree_name
+    # name = self.name
+    # p_name = pedigree_name
 
-    if name && p_name
-      "#{p_name}：#{name}"
+    if name && pedigree_name
+      "#{pedigree_name}/#{name}"
     elsif name.blank?
-      p_name.to_s
+      pedigree_name.to_s
     else
       name.to_s
-    end
-  end
-
-  # k=年, v=勝利競走の配列でHashを生成する
-  def won_races
-    major_wins = self.major_wins
-    major_wins.sort_by(&:date).each_with_object(Hash.new([])) do |w, h|
-      h[w.date.year] += [w.name]
     end
   end
 
