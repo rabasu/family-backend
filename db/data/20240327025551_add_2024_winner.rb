@@ -16,7 +16,7 @@ class Add2024Winner < ActiveRecord::Migration[7.1]
       sweepfeet.dam = Horse.generate_stub(name: 'ビジュートウショウ', sex: :female, foaled: '2011/02/25')
       sweepfeet.save
 
-      rb.win(horse: sweepfeet, date: '2024/03/02', race_name: 'チューリップ賞', code: :jra_g2)
+      rb.run(horse: sweepfeet, date: '2024/03/02', race_name: 'チューリップ賞', grade: :jra_g2, finnish: 1)
 
       rb.build_family(
         bloodmare: 'セヴアイン',
@@ -35,7 +35,7 @@ class Add2024Winner < ActiveRecord::Migration[7.1]
     ActiveRecord::Base.transaction do
       sweepfeet = Horse.find_by(name: 'スウィープフィート')
       family_line = sweepfeet&.family_line
-      sevign = family_line&.imported_mare
+      sevign = family_line&.bloodmare
 
       sweepfeet&.destroy
       family_line&.destroy

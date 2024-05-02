@@ -47,10 +47,11 @@ class CreateHorses < ActiveRecord::Migration[7.1]
       t.timestamps
     end
 
-    create_table :major_wins do |t|
+    create_table :racing_records do |t|
       t.date :date
       t.references :horse
       t.references :graded_race
+      t.integer :finnish
 
       t.timestamps
     end
@@ -72,8 +73,8 @@ class CreateHorses < ActiveRecord::Migration[7.1]
 
     add_foreign_key :horses, :family_lines
     add_foreign_key :graded_races, :grades
-    add_foreign_key :major_wins, :horses
-    add_foreign_key :major_wins, :graded_races
+    add_foreign_key :racing_records, :horses
+    add_foreign_key :racing_records, :graded_races
     add_foreign_key :awardings, :horses
     add_foreign_key :awardings, :awards
   end

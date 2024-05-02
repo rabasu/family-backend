@@ -83,14 +83,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_22_173414) do
     t.index ["sire_id"], name: "index_horses_on_sire_id"
   end
 
-  create_table "major_wins", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "racing_records", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.date "date"
     t.bigint "horse_id"
     t.bigint "graded_race_id"
+    t.integer "finnish"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["graded_race_id"], name: "index_major_wins_on_graded_race_id"
-    t.index ["horse_id"], name: "index_major_wins_on_horse_id"
+    t.index ["graded_race_id"], name: "index_racing_records_on_graded_race_id"
+    t.index ["horse_id"], name: "index_racing_records_on_horse_id"
   end
 
   add_foreign_key "awardings", "awards"
@@ -100,6 +101,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_22_173414) do
   add_foreign_key "horses", "family_lines"
   add_foreign_key "horses", "horses", column: "dam_id"
   add_foreign_key "horses", "horses", column: "sire_id"
-  add_foreign_key "major_wins", "graded_races"
-  add_foreign_key "major_wins", "horses"
+  add_foreign_key "racing_records", "graded_races"
+  add_foreign_key "racing_records", "horses"
 end
