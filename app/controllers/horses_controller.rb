@@ -20,6 +20,6 @@ class HorsesController < ApplicationController
   private
 
   def options
-    { fields: { horse: %i[display_name foaled sex group sire dam family_line won_races all_races] } }
+    { fields: { horse: %i[display_name foaled sex group sire dam won_races all_races family_line] } }
   end
 end

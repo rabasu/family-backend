@@ -15,18 +15,20 @@ class HorseSerializer
   end
 
   attributes :sire, if: proc { |obj| obj.race_horse? } do |obj|
-    HorseSerializer.new(obj.sire).serializable_hash.fetch(:data, {})
+    options = { fields: { horse: %i[display_name foaled won_races all_races family_line] } }
+    HorseSerializer.new(obj.sire, options).serializable_hash.fetch(:data, {})
   end
 
-  attributes :sire_name do |obj|
+  attributes :sire_name, if: proc { |obj| obj.race_horse? } do |obj|
     obj.sire&.display_name
   end
 
   attributes :dam, if: proc { |obj| obj.race_horse? } do |obj|
-    HorseSerializer.new(obj.dam).serializable_hash.fetch(:data, {})
+    options = { fields: { horse: %i[display_name foaled won_races all_races family_line] } }
+    HorseSerializer.new(obj.dam, options).serializable_hash.fetch(:data, {})
   end
 
-  attributes :dam_name do |obj|
+  attributes :dam_name, if: proc { |obj| obj.race_horse? } do |obj|
     obj.dam&.display_name
   end
 

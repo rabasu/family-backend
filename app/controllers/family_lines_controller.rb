@@ -20,6 +20,6 @@ class FamilyLinesController < ApplicationController
   private
 
   def options
-    { fields: { family_line: %i[display_name family_number imported_year imported_by bloodmare horses] } }
+    { fields: { family_line: %i[display_name family_number imported_year imported_by from bloodmare horses] } }
   end
 end
